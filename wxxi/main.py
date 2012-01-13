@@ -56,7 +56,7 @@ def scrape_patent(csv_out, p_id):
 
 
     patent_class_info_table = info_tables[2].findAll('tr')
-    if len(info_tables[2].findAll(text=re.compile("Application Number"))):
+    if not len(info_tables[2].findAll(text=re.compile("Current U.S. Class"))):
         patent_class_info_table = info_tables[3].findAll('tr')
 
     patent_classes = ""
@@ -79,6 +79,9 @@ def scrape_patent(csv_out, p_id):
             pass
         except TypeError:
             pass
+
+    if not len(patent_classes.strip()):
+        raise Exception, "Missing patent classes."
 
     print "\tName:", patent_name
     print "\tIssue Date:", issue_date
