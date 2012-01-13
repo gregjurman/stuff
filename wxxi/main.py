@@ -54,10 +54,13 @@ def scrape_patent(csv_out, p_id):
         except TypeError:
             pass # We don't care, its usually a 'Notice'
 
+    patent_class_info_table = None
+    for i in range(0, len(info_tables)-1):
+        if len(info_tables[1+i].findAll(text=re.compile("Current U.S. Class"))):
+            patent_class_info_table = info_tables[1+i].findAll('tr')
 
-    patent_class_info_table = info_tables[2].findAll('tr')
-    if not len(info_tables[2].findAll(text=re.compile("Current U.S. Class"))):
-        patent_class_info_table = info_tables[3].findAll('tr')
+    if patent_class_info_table is None:
+        raise Exception, "Missing patent classes"
 
     patent_classes = ""
     b = ""
